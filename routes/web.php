@@ -38,6 +38,9 @@ Route::match(['get','post'],'login', [AdminController::class, 'login'])->name('a
 Route::group(['middleware'=>['admin']],function() {
     //addmin route to dashboard
 Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
+    
+
 });
 
 
