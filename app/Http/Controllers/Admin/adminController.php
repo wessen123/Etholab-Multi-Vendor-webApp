@@ -16,28 +16,36 @@ class adminController extends Controller
         return view('admin.dashboard');
     }
     public function login(Request $request){
+
         //echo $password=Hash::make("wessen123"); 
         // die;
+
         if($request->isMethod('post')){
 
-        $data=$request->all();
-        //dd( $data);  //dd( $data);
-           // echo "<pre>"; print_r($data);echo "<pre>"; 
-//
-$request['status']=1;
-$credentials = $request->only('email', 'password','status');     
- //dd( $credentials );  
-            if(Auth::guard('admin')->attempt($credentials)){
-               
-                return  redirect("admin/dashboard");
-              }else{
-               // dd("wess");
-                return redirect()->back()->with('error_message','Invalid Email or Password');
-              }
+               $data=$request->all();
+                //dd( $data);  //dd( $data);
+                // echo "<pre>"; print_r($data);echo "<pre>"; 
+
+
+                $validated = $request->validate([
+                    'email' => 'required|email|max:255',
+                    'password' => 'required',
+                ]);
+                $request['status']=1;
+                $credentials = $request->only('email', 'password','status');     
+
+                if(Auth::guard('admin')->attempt($credentials)){
+                    return  redirect("admin/dashboard");
+
+                }else{
+                    return redirect()->back()->with('error_message','Invalid Email or Password');
+
+                }
 
         }
         return view('admin.login');
     }
+    
     public function logout(){
 
         Auth::guard('admin')->logout();
